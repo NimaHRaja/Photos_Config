@@ -4,7 +4,7 @@ Get_list_of_files <- function(folder_name, num_files_in_each_bucket, output_file
     
     #############  
     
-    print(paste(Sys.time(), ": Generating the list of all files in ", folder_name, sep = ""))
+    print(paste(Sys.time(), ": Generating list of all files in ", folder_name, sep = ""))
     
     files <- 
         data.frame(

@@ -12,6 +12,7 @@ source("Get_Meta_for_a_Bucket.R")
 
 if(!dir.exists("data")) {dir.create("data")}
 if(!dir.exists("data/list")) {dir.create("data/list")}
+if(!dir.exists("data/photo_meta")) {dir.create("data/photo_meta")}
 
 Get_list_of_files(folder_name = "C:/Photos_All", 
                   num_files_in_each_bucket = 1000, 
@@ -37,9 +38,9 @@ list_of_files_temp <- merge(list_of_files,
 list_of_files_temp[!(is.na(list_of_files_temp$bucket_id)),]$status <- TRUE
 write.table(list_of_files_temp[, 1:3], "data/list/list_of_photos.csv", row.names = FALSE)
 
-
-
-
+write.table(meta_for_a_bucket[[1]],
+            paste("data/photo_meta/photo_meta_", i, ".csv", sep = ""),
+            row.names = FALSE)
 
 
 

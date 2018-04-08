@@ -2,7 +2,6 @@ Get_meta_for_a_bucket <- function(i, list_of_files){
     print(paste(Sys.time(), ": Subsetting the list", sep = ""))
     
     bucket_of_files <- subset(list_of_files, bucket == i & !status)
-    bucket_of_files <- bucket_of_files[1:10,]
     
     print(paste(Sys.time(), ": Completed", sep = ""))
     
