@@ -1,55 +1,86 @@
-# INIT
-
-library(exifr)
-# library(tools) file_ext()
-library(Rcpp)
-library(reshape2)
-library(ggplot2)
-
-source("Get_list_of_Files.R")
-source("Get_Meta_for_a_Bucket.R")
-# Prepare and save list of files 
-
-if(!dir.exists("data")) {dir.create("data")}
-if(!dir.exists("data/list")) {dir.create("data/list")}
-if(!dir.exists("data/photo_meta")) {dir.create("data/photo_meta")}
-
-Get_list_of_files(folder_name = "C:/Photos_All", 
-                  num_files_in_each_bucket = 1000, 
-                  output_file = "data/list/list_of_photos.csv")
 
 
 # Read and Subset list_of_files
+
+
+
+bucket_number_min <- 81
+bucket_number_max <- 81
+
+for(bucket_number in (bucket_number_min:bucket_number_max)){
+    
+    print(bucket_number)
+    
+    list_of_files <- 
+        read.table("data/list/list_of_photos.csv", 
+                   header = TRUE, 
+                   stringsAsFactors = FALSE)
+    
+    meta_for_a_bucket <- 
+        Get_meta_for_a_bucket(i = bucket_number, 
+                              list_of_files = list_of_files)
+    
+    list_of_files_temp <- merge(list_of_files, 
+                                meta_for_a_bucket[[2]], 
+                                by = "file_path", 
+                                all.x = TRUE)
+    
+    list_of_files_temp[!(is.na(list_of_files_temp$bucket_id)),]$status <- TRUE
+    write.table(list_of_files_temp[, 1:3], "data/list/list_of_photos.csv", row.names = FALSE)
+    
+    write.table(meta_for_a_bucket[[1]],
+                paste("data/photo_meta/photo_meta_", bucket_number, ".csv", sep = ""),
+                row.names = FALSE)
+    
+    # beep(sound = 6)
+}
+
+# beep(sound = 4)
 
 list_of_files <- 
     read.table("data/list/list_of_photos.csv", 
                header = TRUE, 
                stringsAsFactors = FALSE)
 
-meta_for_a_bucket <- 
-    Get_meta_for_a_bucket(i = 2, 
-                          list_of_files = list_of_files)
+table(list_of_files$bucket, list_of_files$status)
 
-list_of_files_temp <- merge(list_of_files, 
-                            meta_for_a_bucket[[2]], 
-                            by = "file_path", 
-                            all.x = TRUE)
+## Test a failed bucket
 
-list_of_files_temp[!(is.na(list_of_files_temp$bucket_id)),]$status <- TRUE
-write.table(list_of_files_temp[, 1:3], "data/list/list_of_photos.csv", row.names = FALSE)
+a_bucket <- subset(list_of_files, bucket == 81)
+# a_bucket <- a_bucket[-(1:500),]
 
-write.table(meta_for_a_bucket[[1]],
-            paste("data/photo_meta/photo_meta_", i, ".csv", sep = ""),
-            row.names = FALSE)
+for(a_file in a_bucket$file_path){
+    print(a_file)
+    exifr(a_file)
+}
 
-
-
+list_of_files <- 
+    read.table("data/list/list_of_photos.csv", 
+               header = TRUE, 
+               stringsAsFactors = FALSE)
 
 
+# list_of_files[grepl("C:/Photos_All/Maryam_Mobile/Camera/2013", list_of_files$file_path) & list_of_files$bucket == 41,]$status <- TRUE
+# list_of_files[grepl("C:/Photos_All/Maryam_Mobile/Camera/2013", list_of_files$file_path) & list_of_files$bucket == 41,]$bucket <- 404
+# list_of_files[grepl("C:/Photos_All/Maryam_Mobile/XperiaTransferTemp/2013", list_of_files$file_path) & list_of_files$bucket == 41,]$status <- TRUE
+# list_of_files[grepl("C:/Photos_All/Maryam_Mobile/XperiaTransferTemp/2013", list_of_files$file_path) & list_of_files$bucket == 41,]$bucket <- 404
+# list_of_files[grepl("C:/Photos_All/Maryam_Mobile/XperiaTransferTemp/20140", list_of_files$file_path) & list_of_files$bucket == 41,]$status <- TRUE
+# list_of_files[grepl("C:/Photos_All/Maryam_Mobile/XperiaTransferTemp/20140", list_of_files$file_path) & list_of_files$bucket == 41,]$bucket <- 404
+# list_of_files[grepl("C:/Photos_All/Maryam_Mobile/XperiaTransferTemp/2014-08", list_of_files$file_path) & list_of_files$bucket == 41,]$status <- TRUE
+# list_of_files[grepl("C:/Photos_All/Maryam_Mobile/XperiaTransferTemp/2014-08", list_of_files$file_path) & list_of_files$bucket == 41,]$bucket <- 404
+
+
+# list_of_files[grepl("C:/Photos_All/Old_Mobile Photos/2013", list_of_files$file_path) & list_of_files$bucket == 51,]$status <- TRUE
+# list_of_files[grepl("C:/Photos_All/Old_Mobile Photos/2013", list_of_files$file_path) & list_of_files$bucket == 51,]$bucket <- 404
+# list_of_files[grepl("C:/Photos_All/Old_Mobile Photos/2014", list_of_files$file_path) & list_of_files$bucket == 51,]$status <- TRUE
+# list_of_files[grepl("C:/Photos_All/Old_Mobile Photos/2014", list_of_files$file_path) & list_of_files$bucket == 51,]$bucket <- 404
+# list_of_files[grepl("C:/Photos_All/To Organise/Photos/2012/Others", list_of_files$file_path) & list_of_files$bucket == 81,]$status <- TRUE
+# list_of_files[grepl("C:/Photos_All/To Organise/Photos/2012/Others", list_of_files$file_path) & list_of_files$bucket == 81,]$bucket <- 404
 
 
 
 
+write.table(list_of_files, "data/list/list_of_photos.csv", row.names = FALSE)
 
 ### Exploratory Approach
 
@@ -72,26 +103,26 @@ write.table(meta_for_a_bucket[[1]],
 #     # head(files)
 # }
 
-num_files_in_one_go <- 100
-num_repeat <- 1
-
-for(i in 1:num_repeat){
-    
-    print(Sys.time())
-    files <- read.csv("data/list_of_photos.csv", stringsAsFactors = FALSE)
-    set_of_files <- subset(files, !status)$file_path
-    if(length(set_of_files)[1] > num_files_in_one_go){set_of_files <- 
-        set_of_files[1:num_files_in_one_go]}
-    
-    
-    lapply(set_of_files, add_a_file_meta_to_csv)
-    files[files$file_path %in% set_of_files, ]$status <- TRUE
-    write.csv(files, "data/list_of_photos.csv", row.names = FALSE)
-    
-    print(table(files$status))
-    print(Sys.time())
-}
-
+# num_files_in_one_go <- 100
+# num_repeat <- 1
+# 
+# for(i in 1:num_repeat){
+#     
+#     print(Sys.time())
+#     files <- read.csv("data/list_of_photos.csv", stringsAsFactors = FALSE)
+#     set_of_files <- subset(files, !status)$file_path
+#     if(length(set_of_files)[1] > num_files_in_one_go){set_of_files <- 
+#         set_of_files[1:num_files_in_one_go]}
+#     
+#     
+#     lapply(set_of_files, add_a_file_meta_to_csv)
+#     files[files$file_path %in% set_of_files, ]$status <- TRUE
+#     write.csv(files, "data/list_of_photos.csv", row.names = FALSE)
+#     
+#     print(table(files$status))
+#     print(Sys.time())
+# }
+# 
 
 A <- read.table("data/photos_metadata.csv", stringsAsFactors = FALSE, header = TRUE)
 length(unique(A$SourceFile))
@@ -139,6 +170,22 @@ ggplot(JJ, aes(x = as.factor(CreateDate$mon), y = as.integer(CameraTemperature))
 
 ###########################
 
+files <- list.files(
+    "C:/Personal/__Archive2018/Projects/Photos_Config/data/photo_meta", 
+    all.files = TRUE,
+    full.names = TRUE,
+    recursive = TRUE)
+
+MM <- 
+lapply(files,
+       function(x) {DF <- read.table(x, header = TRUE) 
+       subset(DF, variable == "CameraTemperature")})
+
+NN <- do.call(rbind, MM)
+View(table(as.character(NN$value)))
+ggplot(NN, aes(x = as.integer(as.character(value)))) + geom_histogram() 
+
+##############################
 
 WW <- dcast(subset(A, variable %in% c("FacesDetected", "FileType")), SourceFile ~ variable)
 table(WW$FacesDetected, WW$FileType)
