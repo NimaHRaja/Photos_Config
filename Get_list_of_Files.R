@@ -34,7 +34,6 @@ Get_list_of_files <- function(folder_name, num_files_in_each_bucket, output_file
     
     print(paste(Sys.time(), ": Writing results to ", output_file, sep = ""))
     
-    if(!dir.exists("data")) {dir.create("data")}
     write.table(files, output_file, row.names = FALSE)
     
     print(paste(Sys.time(), ": Completed", sep = ""))
