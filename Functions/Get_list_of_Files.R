@@ -1,4 +1,8 @@
-# Prepare and save list of files 
+# Get_list_of_files
+# Finds all files in a directory (folder_name)
+# Assigns them to buckets of size num_files_in_each_bucket (to be analysed in bunches later)
+# Adds a status column to the list to identify the photos that have already been analysed
+# Writes the list into output_file
 
 Get_list_of_files <- function(folder_name, num_files_in_each_bucket, output_file){
     
