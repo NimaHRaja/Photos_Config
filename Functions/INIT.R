@@ -1,3 +1,7 @@
+# INIT
+# loads packagegs, sources functions, and create directories
+
+
 # Libraries
 
 library(exifr)
