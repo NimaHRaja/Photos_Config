@@ -1,5 +1,5 @@
 # INIT
-# loads packagegs, sources functions, and create directories
+# loads packages, sources functions, and create directories
 
 
 # Libraries
