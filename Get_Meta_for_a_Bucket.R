@@ -1,3 +1,9 @@
+# Get_meta_for_a_bucket
+# Gets list_of_files and bucket number (i)
+# Finds all the files in that buckets which hasn't been analysed 
+# Extracts the metadata and melts (flatten) them
+# Returns the metadata and a list of the analysed files
+
 Get_meta_for_a_bucket <- function(i, list_of_files){
     print(paste(Sys.time(), ": Subsetting the list", sep = ""))
     
