@@ -9,6 +9,7 @@ library(exifr)
 # library(reshape2)
 # library(ggplot2)
 library(dplyr)
+library(fs)
 
 
 ### Source functions
@@ -36,5 +37,3 @@ setwd(root_folder)
 # Remove variables
 
 rm(root_folder)
-rm(local_folder)
-rm(config)

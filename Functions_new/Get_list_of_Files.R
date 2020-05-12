@@ -28,7 +28,7 @@ Get_list_of_files <- function(folder_name, num_files_in_each_bucket, output_file
     
     num_files <- dim(files)[1]
     
-    files$bucket <- rep(1:round(num_files/num_files_in_each_bucket), 
+    files$bucket <- rep(1:(round(num_files/num_files_in_each_bucket)+1), 
                         each = num_files_in_each_bucket, 
                         length.out = num_files)
     
