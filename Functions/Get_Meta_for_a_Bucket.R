@@ -15,7 +15,7 @@ Get_meta_for_a_bucket <- function(i, list_of_files){
     
     print(paste(Sys.time(), ": Getting metadata for bucket ", i, sep = ""))
     
-    output<- melt(exifr(bucket_of_files$file_path), id.vars = "SourceFile")
+    output<- melt(read_exif(bucket_of_files$file_path), id.vars = "SourceFile")
     
     print(paste(Sys.time(), ": Completed", sep = ""))
     
