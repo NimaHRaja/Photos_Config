@@ -14,8 +14,8 @@ library(fs)
 
 ### Source functions
 
-source("Functions/Get_list_of_Files.R")
-source("Functions/Get_Meta_for_a_Bucket.R")
+source("Functions_new/Get_list_of_Files.R")
+# source("Functions/Get_Meta_for_a_Bucket.R") ### deprecated
 
 
 ### Read config
