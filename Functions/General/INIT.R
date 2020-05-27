@@ -21,6 +21,8 @@ library(zoo)
 
 config <- read.csv("config.csv", stringsAsFactors = FALSE) 
 local_folder <- config %>% filter(type == "local_folder") %>% select(value) %>% as.character()
+clean_metadata_folder <- config %>% filter(type == "clean_metadata_folder") %>% select(value) %>% as.character()
+
 
 
 ### Create directories

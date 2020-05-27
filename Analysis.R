@@ -10,7 +10,9 @@ source("Functions/General/INIT.R")
 
 source("Functions/Analysis/get_Camera_model.R")
 
-if(!file.exists("Data/camera_models.csv")){
+data_file <- paste(clean_metadata_folder, "/camera_models.csv", sep = "")
+
+if(!file.exists(data_file)){
     DF_camera <- 
         do.call("bind_rows", 
                 lapply(
@@ -19,8 +21,8 @@ if(!file.exists("Data/camera_models.csv")){
                         full.names = TRUE), 
                     get_camera_model));
     
-    write.csv(DF_camera, "Data/camera_models.csv", row.names = FALSE)
-} else {DF_camera <- read.csv("Data/camera_models.csv")}
+    write.csv(DF_camera, data_file, row.names = FALSE)
+} else {DF_camera <- read.csv(data_file)}
 
 DF_camera %>% 
     mutate(year = as.POSIXct(DateTimeOriginal ,format="%Y:%m:%d %H:%M:%S") %>% format("%Y")) %>%
@@ -32,7 +34,9 @@ DF_camera %>%
 
 source("Functions/Analysis/get_temperature.R")
 
-if(!file.exists("Data/camera_temperature.csv")){
+data_file <- paste(clean_metadata_folder, "/camera_temperature.csv", sep = "")
+
+if(!file.exists(data_file)){
     DF_temperature <- 
         do.call("bind_rows", 
                 lapply(
@@ -47,8 +51,8 @@ if(!file.exists("Data/camera_temperature.csv")){
         mutate(month = as.POSIXct(DateTimeOriginal ,format="%Y:%m:%d %H:%M:%S") %>% format("%b")) %>% 
         mutate(yearmon = as.yearmon(as.POSIXct(DateTimeOriginal ,format="%Y:%m:%d %H:%M:%S")));
     
-    write.csv(DF_temperature, "Data/camera_temperature.csv", row.names = FALSE)
-} else {DF_temperature <- read.csv("Data/camera_temperature.csv")}
+    write.csv(DF_temperature, data_file, row.names = FALSE)
+} else {DF_temperature <- read.csv(data_file)}
 
 DF_temperature %>% filter(!is.na(CameraTemperature)) %>%
     ggplot(aes(x = yearmon, y = CameraTemperature, group = yearmon)) + 

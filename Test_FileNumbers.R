@@ -6,19 +6,21 @@ source("Functions/General/INIT.R")
 
 source("Functions/Analysis/get_file_number.R")
 
-if(!file.exists("Data/camera_filenumber.csv")){
+data_file <- paste(clean_metadata_folder, "/camera_filenumber.csv", sep = "")
+
+if(!file.exists(data_file)){
     DF_FileNumber <- 
         do.call("bind_rows", 
                 lapply(
                     list.files(
                         config %>% filter(type == "meta_folder_analysis") %>% select(value) %>% as.character(), 
-                        full.names = TRUE)[1:2], 
+                        full.names = TRUE), 
                     get_file_number))  %>% 
         mutate(year = as.POSIXct(DateTimeOriginal ,format="%Y:%m:%d %H:%M:%S") %>% format("%Y")) %>%
         mutate(series = floor(FileNumber/1000), FN = FileNumber - series * 1000);
     
-    write.csv(DF_FileNumber, "Data/camera_filenumber.csv", row.names = FALSE)
-} else {DF_FileNumber <- read.csv("Data/camera_filenumber.csv")}
+    write.csv(DF_FileNumber, data_file, row.names = FALSE)
+} else {DF_FileNumber <- read.csv(data_file)}
 
 DF_FileNumber %>% 
     arrange(DateTimeOriginal) %>%
