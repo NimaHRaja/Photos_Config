@@ -7,16 +7,10 @@
 library(exifr)
 # library(Rcpp)
 library(reshape2)
-# library(ggplot2)
+library(ggplot2)
 library(dplyr)
 library(fs)
 library(zoo)
-
-
-### Source functions
-
-source("Functions_new/Get_list_of_Files.R")
-# source("Functions/Get_Meta_for_a_Bucket.R") ### deprecated
 
 
 ### Read config

@@ -2,6 +2,5 @@
 *.csv
 *.Rproj
 *.Rhistory
-old_data/README DATA.txt
 .Rproj.user
 Old Version/

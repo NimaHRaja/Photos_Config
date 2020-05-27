@@ -1,19 +1,19 @@
 ######### INIT 
 
-source("Functions_new/INIT.R")
+source("Functions/General/INIT.R")
 
 ######### Camera models
 
 ### Number of photos per Camera per year
 
-source("Analysis/get_Camera_model.R")
+source("Functions/Analysis/get_Camera_model.R")
 
 DF_camera <- 
     do.call("bind_rows", 
             lapply(
                 list.files(
                     config %>% filter(type == "meta_folder_analysis") %>% select(value) %>% as.character(), 
-                    full.names = TRUE), 
+                    full.names = TRUE)[1:2], 
                 get_camera_model)) 
 
 
