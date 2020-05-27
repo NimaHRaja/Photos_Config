@@ -2,6 +2,10 @@
 # loads packages, sources functions, and create directories
 
 
+### options
+
+options(stringsAsFactors = FALSE)
+
 ### Libraries
 
 library(exifr)

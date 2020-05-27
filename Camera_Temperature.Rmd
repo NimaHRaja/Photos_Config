@@ -1,33 +1,19 @@
+---
+title: "Camera Temperature"
+author: "Nima Hamedani-Raja"
+date: "27/05/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r Camera_temperature}
 ######### INIT 
 
 source("Functions/General/INIT.R")
 
-
-#########################################################################
-######### Camera models
-
-### Number of photos per Camera per year
-
-source("Functions/Analysis/get_Camera_model.R")
-
-if(!file.exists("Data/camera_models.csv")){
-    DF_camera <- 
-        do.call("bind_rows", 
-                lapply(
-                    list.files(
-                        config %>% filter(type == "meta_folder_analysis") %>% select(value) %>% as.character(), 
-                        full.names = TRUE), 
-                    get_camera_model));
-    
-    write.csv(DF_camera, "Data/camera_models.csv", row.names = FALSE)
-} else {DF_camera <- read.csv("Data/camera_models.csv")}
-
-DF_camera %>% 
-    mutate(year = as.POSIXct(DateTimeOriginal ,format="%Y:%m:%d %H:%M:%S") %>% format("%Y")) %>%
-    group_by(year, Model, CanonModelID) %>% summarise(tot_photos = n())
-
-
-#########################################################################
 ########## CameraTemperature
 
 source("Functions/Analysis/get_temperature.R")
@@ -58,3 +44,4 @@ DF_temperature %>% filter(!is.na(CameraTemperature)) %>%
 DF_temperature %>% filter(!is.na(CameraTemperature)) %>%
     ggplot(aes(x = CameraTemperature, colour = month)) +
     geom_density()
+```
